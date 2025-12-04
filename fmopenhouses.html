@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fort Myers & Cape Coral Scouting Trip</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+     
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        #map { height: 500px; width: 100%; border-radius: 0.5rem; }
+        .day-card { border-left: 4px solid; }
+        .day-1 { border-color: #3B82F6; } /* Blue */
+        .day-2 { border-color: #EF4444; } /* Red */
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans p-4">
+
+    <div class="max-w-4xl mx-auto">
+        
+        <!-- Header -->
+        <header class="mb-6 text-center">
+            <h1 class="text-3xl font-bold text-gray-900">Fort Myers & Cape Coral Scouting Trip</h1>
+            <p class="text-gray-600 mt-2">Two Days. Two Vibes. One Decision.</p>
+        </header>
+
+        <!-- Map Container -->
+        <div class="bg-white p-4 rounded-lg shadow-md mb-8">
+            <div id="map" class="z-0"></div>
+            <div class="mt-2 text-sm text-gray-500 flex gap-4 justify-center">
+                <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-blue-500 mr-1"></span> Friday (Inland/Space)</span>
+                <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-red-500 mr-1"></span> Saturday (Cape Coral/Water)</span>
+            </div>
+        </div>
+
+        <!-- Itinerary Cards -->
+        <div class="grid md:grid-cols-2 gap-6">
+
+            <!-- Friday Column -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="bg-blue-600 text-white p-4">
+                    <h2 class="text-xl font-bold">Day 1: Friday (Dec 5)</h2>
+                    <p class="text-blue-100 text-sm">The "Space & Privacy" Tour (East of I-75)</p>
+                </div>
+                <div class="p-4 space-y-6">
+                    
+                    <!-- Stop 1 -->
+                    <div class="day-card day-1 pl-4">
+                        <span class="text-xs font-bold text-blue-600 uppercase tracking-wide">11:00 AM • Start</span>
+                        <h3 class="font-bold text-lg">Hawks Preserve</h3>
+                        <p class="text-sm text-gray-600 mb-1">2501 Hawks Preserve Dr, Fort Myers</p>
+                        <p class="text-sm italic text-gray-500 mb-2">"Is this too far out, or just peaceful enough?"</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=2501+Hawks+Preserve+Dr+Fort+Myers+FL" target="_blank" class="text-blue-600 hover:underline text-sm font-semibold">📍 Navigate Here</a>
+                    </div>
+
+                    <!-- Stop 2 -->
+                    <div class="day-card day-1 pl-4">
+                        <span class="text-xs font-bold text-blue-600 uppercase tracking-wide">12:00 PM • The Rural Vibe</span>
+                        <h3 class="font-bold text-lg">Buckingham Area (Bentley Crossing)</h3>
+                        <p class="text-sm text-gray-600 mb-1">1168 Brooklands Dr, Fort Myers</p>
+                        <p class="text-sm italic text-gray-500 mb-2">Larger lots, rural feel. Very different from the coast.</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=1168+Brooklands+Dr+Fort+Myers+FL" target="_blank" class="text-blue-600 hover:underline text-sm font-semibold">📍 Navigate Here</a>
+                    </div>
+
+                    <!-- Stop 3 -->
+                    <div class="day-card day-1 pl-4">
+                        <span class="text-xs font-bold text-blue-600 uppercase tracking-wide">1:00 PM • The Villa Test</span>
+                        <h3 class="font-bold text-lg">Hemingway Pointe</h3>
+                        <p class="text-sm text-gray-600 mb-1">14168 Hemingway Oaks Trl, Fort Myers</p>
+                        <p class="text-sm italic text-gray-500 mb-2">Test: "Could I live with a shared wall if I never had to mow?"</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=14168+Hemingway+Oaks+Trl+Fort+Myers+FL" target="_blank" class="text-blue-600 hover:underline text-sm font-semibold">📍 Navigate Here</a>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Saturday Column -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="bg-red-600 text-white p-4">
+                    <h2 class="text-xl font-bold">Day 2: Saturday (Dec 6)</h2>
+                    <p class="text-red-100 text-sm">The "Cape Coral" Deep Dive</p>
+                </div>
+                <div class="p-4 space-y-6">
+
+                    <!-- Stop 1 -->
+                    <div class="day-card day-2 pl-4">
+                        <span class="text-xs font-bold text-red-600 uppercase tracking-wide">11:00 AM • Newer / Freshwater</span>
+                        <h3 class="font-bold text-lg">SW Cape (Newer Build)</h3>
+                        <p class="text-sm text-gray-600 mb-1">1217 SW 15th Ter, Cape Coral</p>
+                        <p class="text-sm italic text-gray-500 mb-2">Freshwater canal. Better value, lower insurance age (2017).</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=1217+SW+15th+Ter+Cape+Coral+FL" target="_blank" class="text-red-600 hover:underline text-sm font-semibold">📍 Navigate Here</a>
+                    </div>
+
+                    <!-- Stop 2 -->
+                    <div class="day-card day-2 pl-4">
+                        <span class="text-xs font-bold text-red-600 uppercase tracking-wide">1:00 PM • Gulf Access</span>
+                        <h3 class="font-bold text-lg">SW Cape (Gulf Access)</h3>
+                        <p class="text-sm text-gray-600 mb-1">1733 SW 29th Ter, Cape Coral</p>
+                        <p class="text-sm italic text-gray-500 mb-2">The Florida Dream. Can he see himself boating from here?</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=1733+SW+29th+Ter+Cape+Coral+FL" target="_blank" class="text-red-600 hover:underline text-sm font-semibold">📍 Navigate Here</a>
+                    </div>
+
+                    <!-- Stop 3 -->
+                    <div class="day-card day-2 pl-4">
+                        <span class="text-xs font-bold text-red-600 uppercase tracking-wide">2:30 PM • Historic Character</span>
+                        <h3 class="font-bold text-lg">Savona Neighborhood</h3>
+                        <p class="text-sm text-gray-600 mb-1">3630 SE 17th Ave, Cape Coral</p>
+                        <p class="text-sm italic text-gray-500 mb-2">Mature palms, "Old Florida" charm. Established neighborhood feel.</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=3630+SE+17th+Ave+Cape+Coral+FL" target="_blank" class="text-red-600 hover:underline text-sm font-semibold">📍 Navigate Here</a>
+                    </div>
+
+                    <!-- Lunch -->
+                    <div class="day-card day-2 pl-4 border-l-gray-400">
+                        <span class="text-xs font-bold text-gray-600 uppercase tracking-wide">LUNCH / VIBE CHECK</span>
+                        <h3 class="font-bold text-lg">Cape Harbour</h3>
+                        <p class="text-sm text-gray-600 mb-1">5703 Cape Harbour Dr, Cape Coral</p>
+                        <p class="text-sm italic text-gray-500 mb-2">Grab a drink at the marina. Watch the boats. Feel the energy.</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=5703+Cape+Harbour+Dr+Cape+Coral+FL" target="_blank" class="text-gray-600 hover:underline text-sm font-semibold">📍 Navigate Here</a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        
+        <!-- Checklist Footer -->
+        <div class="mt-8 bg-yellow-50 p-6 rounded-lg border border-yellow-200">
+            <h3 class="font-bold text-lg text-yellow-800 mb-2">Dad's Mental Checklist</h3>
+            <ul class="list-disc pl-5 space-y-1 text-sm text-yellow-900">
+                <li><strong>The Bridge Tax:</strong> Did crossing the toll bridge into Cape Coral annoy him?</li>
+                <li><strong>The Cage Check:</strong> Look at the pool cage beams. Rusty = $$$ replacement soon.</li>
+                <li><strong>The Villa Verdict:</strong> After Friday, is a "shared wall" a dealbreaker?</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+    <script>
+        // Initialize map centered between the two areas
+        var map = L.map('map').setView([26.62, -81.85], 11);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // Day 1 Data (Blue)
+        var day1 = [
+            { lat: 26.709743, lng: -81.7125818, title: "1. Hawks Preserve", addr: "2501 Hawks Preserve Dr" },
+            { lat: 26.685, lng: -81.72, title: "2. Buckingham Area", addr: "1168 Brooklands Dr" }, // Approx for Buckingham/Bentley Crossing
+            { lat: 26.69, lng: -81.78, title: "3. Hemingway Pointe", addr: "14168 Hemingway Oaks Trl" } // Approx for Hemingway
+        ];
+
+        // Day 2 Data (Red)
+        var day2 = [
+            { lat: 26.6238892, lng: -82.001376, title: "1. Newer Build (Freshwater)", addr: "1217 SW 15th Ter" },
+            { lat: 26.5979226, lng: -82.0115773, title: "2. Gulf Access Dream", addr: "1733 SW 29th Ter" },
+            { lat: 26.5834619, lng: -81.9398346, title: "3. Savona Historic", addr: "3630 SE 17th Ave" },
+            { lat: 26.542, lng: -82.006, title: "Lunch: Cape Harbour", addr: "5703 Cape Harbour Dr" } // Approx Cape Harbour
+        ];
+
+        // Custom Icons
+        var blueIcon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+        });
+
+        var redIcon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+        });
+
+        // Add Markers & Lines Day 1
+        var day1LatLngs = [];
+        day1.forEach(function(stop) {
+            L.marker([stop.lat, stop.lng], {icon: blueIcon}).addTo(map)
+                .bindPopup("<b>" + stop.title + "</b><br>" + stop.addr);
+            day1LatLngs.push([stop.lat, stop.lng]);
+        });
+        L.polyline(day1LatLngs, {color: '#3B82F6', weight: 3, dashArray: '6 4'}).addTo(map);
+        
+        // Add Markers & Lines Day 2
+        var day2LatLngs = [];
+        day2.forEach(function(stop) {
+            L.marker([stop.lat, stop.lng], {icon: redIcon}).addTo(map)
+                .bindPopup("<b>" + stop.title + "</b><br>" + stop.addr);
+            day2LatLngs.push([stop.lat, stop.lng]);
+        });
+        L.polyline(day2LatLngs, {color: '#EF4444', weight: 3, dashArray: '6 4'}).addTo(map);
+
+        // Fit bounds to show all markers
+        var group = new L.featureGroup([
+            L.marker([26.709743, -81.7125818]), 
+            L.marker([26.542, -82.006])
+        ]);
+        map.fitBounds(group.getBounds().pad(0.5));
+
+    </script>
+</body>
+</html>
