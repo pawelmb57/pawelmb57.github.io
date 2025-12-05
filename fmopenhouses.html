@@ -62,8 +62,28 @@
             justify-content: center;
             filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
             transition: all 0.3s ease;
+            position: relative;
         }
         
+        /* Badges for Drive Time */
+        .dt-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #f59e0b; /* Amber-500 */
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            border: 2px solid white;
+            z-index: 10;
+        }
+
         /* Modal Animation */
         .modal-enter {
             opacity: 0;
@@ -86,35 +106,83 @@
 <body class="bg-gray-50 h-screen flex flex-col overflow-hidden relative">
 
     <!-- Header / Filter Bar -->
-    <header class="bg-white shadow-md z-20 p-4 shrink-0 h-[80px] flex items-center justify-between">
-        <div class="flex items-center gap-2">
-            <i class="fa-solid fa-map-location-dot text-blue-600 text-2xl"></i>
-            <h1 class="text-xl font-bold text-gray-800 hidden sm:block">Fort Myers Hunt</h1>
-        </div>
-
-        <!-- Filters -->
-        <div class="flex gap-2 sm:gap-4 overflow-x-auto items-center">
-            
-            <!-- Favorites Toggle -->
-            <button id="favFilterBtn" onclick="toggleFavFilter()" class="border border-gray-300 text-gray-600 px-3 py-1 rounded text-sm hover:bg-gray-50 flex items-center gap-2 transition whitespace-nowrap">
-                <i class="fa-regular fa-heart text-red-500"></i> <span class="hidden sm:inline">Favorites</span>
-            </button>
-            
-            <div class="h-6 w-px bg-gray-300 mx-1"></div>
-
-            <!-- Date Filter (Kept in header) -->
+    <header class="bg-white shadow-md z-20 p-4 shrink-0 flex flex-col gap-4">
+        
+        <!-- Top Row: Controls -->
+        <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <label class="text-sm text-gray-600 hidden sm:block">Date:</label>
-                <select id="dateFilter" onchange="applyFilters()" class="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500 bg-white">
-                    <option value="all">All Dates</option>
-                    <!-- Dates will be populated dynamically -->
-                </select>
+                <i class="fa-solid fa-map-location-dot text-blue-600 text-2xl"></i>
+                <h1 class="text-xl font-bold text-gray-800 hidden sm:block">Fort Myers Hunt</h1>
             </div>
 
-            <!-- Advanced Filters Button -->
-            <button onclick="openFilterModal()" class="bg-blue-600 text-white px-4 py-1.5 rounded text-sm hover:bg-blue-700 transition flex items-center gap-2 whitespace-nowrap shadow-sm">
-                <i class="fa-solid fa-sliders"></i> Filters
-            </button>
+            <!-- Filters & Tools -->
+            <div class="flex gap-2 sm:gap-4 overflow-x-auto items-center">
+                
+                <!-- Favorites Toggle -->
+                <button id="favFilterBtn" onclick="toggleFavFilter()" class="border border-gray-300 text-gray-600 px-3 py-1 rounded text-sm hover:bg-gray-50 flex items-center gap-2 transition whitespace-nowrap">
+                    <i class="fa-regular fa-heart text-red-500"></i> <span class="hidden sm:inline">Favorites</span>
+                </button>
+                
+                <div class="h-6 w-px bg-gray-300 mx-1"></div>
+
+                <!-- Date Filter -->
+                <div class="flex items-center gap-2">
+                    <label class="text-sm text-gray-600 hidden sm:block">Date:</label>
+                    <select id="dateFilter" onchange="applyFilters()" class="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500 bg-white">
+                        <option value="all">All Dates</option>
+                        <!-- Dates populated dynamically -->
+                    </select>
+                </div>
+
+                <!-- Advanced Filters Button -->
+                <button onclick="openFilterModal()" class="bg-blue-600 text-white px-4 py-1.5 rounded text-sm hover:bg-blue-700 transition flex items-center gap-2 whitespace-nowrap shadow-sm">
+                    <i class="fa-solid fa-sliders"></i> Filters
+                </button>
+
+                <!-- Drive Time Button -->
+                <button id="driveTimeBtn" onclick="toggleDriveTimeMode()" class="bg-emerald-600 text-white px-4 py-1.5 rounded text-sm hover:bg-emerald-700 transition flex items-center gap-2 whitespace-nowrap shadow-sm">
+                    <i class="fa-solid fa-car"></i> Drive Time
+                </button>
+            </div>
+        </div>
+
+        <!-- Drive Time Panel (Hidden by default) -->
+        <div id="driveTimePanel" class="hidden bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                <!-- Col 1: Start -->
+                <div class="flex flex-col">
+                    <span class="font-bold text-emerald-800 text-xs uppercase">Select First Point</span>
+                    <span id="dtStartText" class="text-gray-600 truncate">Click a pin on the map</span>
+                </div>
+                <!-- Col 2: End -->
+                <div class="flex flex-col">
+                    <span class="font-bold text-emerald-800 text-xs uppercase">Select Second Point</span>
+                    <span id="dtEndText" class="text-gray-600 truncate">Click another pin on the map</span>
+                </div>
+                <!-- Col 3: Status -->
+                <div class="flex flex-col">
+                    <span class="font-bold text-emerald-800 text-xs uppercase">Status</span>
+                    <span id="dtStatusText" class="text-gray-800 font-medium">Select two points to calculate drive time</span>
+                </div>
+                <!-- Col 4: Controls -->
+                <div class="flex gap-2 justify-end">
+                    <button onclick="clearDriveTimeRoute()" class="px-3 py-1 bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50 text-xs">Clear Route</button>
+                    <button onclick="toggleDriveTimeMode()" class="px-3 py-1 bg-gray-200 border border-gray-300 rounded text-gray-700 hover:bg-gray-300 text-xs">Close / Reset</button>
+                </div>
+            </div>
+
+            <!-- Results Section (Hidden until route calculated) -->
+            <div id="driveTimeResults" class="hidden mt-3 pt-3 border-t border-emerald-200">
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="text-emerald-900">
+                        <span class="font-bold text-lg mr-4"><i class="fa-regular fa-clock"></i> <span id="resTime">-- min</span></span>
+                        <span class="text-gray-600"><i class="fa-solid fa-road"></i> <span id="resDist">-- miles</span></span>
+                    </div>
+                    <a id="googleMapsLink" href="#" target="_blank" class="bg-white border border-emerald-500 text-emerald-700 hover:bg-emerald-50 px-4 py-1.5 rounded text-xs font-bold transition flex items-center gap-2">
+                        <i class="fa-brands fa-google"></i> Show Route with Traffic
+                    </a>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -352,6 +420,12 @@
         let currentFilteredData = [...listings];
         let favorites = [];
         let isFavFilterActive = false;
+        
+        // Drive Time State
+        let isDriveTimeMode = false;
+        let dtStartId = null;
+        let dtEndId = null;
+        let routeLayer = null;
 
         // --- INIT ---
         function initApp() {
@@ -400,23 +474,36 @@
         }
 
         // --- CUSTOM ICONS ---
-        function getIcon(isActive, isFav) {
+        function getIcon(isActive, isFav, dtIndex) {
             let iconClass = 'fa-location-dot';
             let colorClass = 'text-blue-600';
-            
-            if (isFav) {
-                iconClass = 'fa-heart';
-                colorClass = 'text-red-500';
-            } else if (isActive) {
-                colorClass = 'text-red-600';
+            let badgeHtml = '';
+
+            // Drive Time Logic
+            if (dtIndex === 1) {
+                // Start Point - Distinct Style (e.g., Greenish)
+                colorClass = 'text-emerald-600';
+                badgeHtml = '<div class="dt-badge">1</div>';
+            } else if (dtIndex === 2) {
+                // End Point - Distinct Style (e.g., Orange/Red)
+                colorClass = 'text-orange-600';
+                badgeHtml = '<div class="dt-badge">2</div>';
+            } else {
+                // Normal Logic
+                if (isFav) {
+                    iconClass = 'fa-heart';
+                    colorClass = 'text-red-500';
+                } else if (isActive) {
+                    colorClass = 'text-red-600';
+                }
             }
             
-            const sizeClass = isActive ? 'text-5xl' : 'text-3xl';
-            const anchor = isActive ? [18, 42] : [10, 24];
+            const sizeClass = isActive || dtIndex ? 'text-5xl' : 'text-3xl';
+            const anchor = isActive || dtIndex ? [18, 42] : [10, 24];
 
             return L.divIcon({
                 className: 'custom-div-icon',
-                html: `<div class="marker-pin"><i class="fa-solid ${iconClass} ${colorClass} ${sizeClass}"></i></div>`,
+                html: `<div class="marker-pin"><i class="fa-solid ${iconClass} ${colorClass} ${sizeClass}"></i>${badgeHtml}</div>`,
                 iconSize: [30, 42],
                 iconAnchor: anchor,
                 popupAnchor: [0, -32]
@@ -438,8 +525,202 @@
             map.on('moveend', updateListBasedOnBounds);
         }
 
-        // --- LOGIC ---
+        // --- DRIVE TIME LOGIC ---
+
+        function toggleDriveTimeMode() {
+            if (isDriveTimeMode) {
+                // Turn OFF
+                isDriveTimeMode = false;
+                clearDriveTimeRoute(); // Resets selections & map
+                document.getElementById('driveTimePanel').classList.add('hidden');
+                document.getElementById('driveTimeBtn').classList.remove('bg-emerald-800');
+                document.getElementById('driveTimeBtn').classList.add('bg-emerald-600');
+                
+                // Restore map functionality
+                applyFilters(); // Re-render markers based on current filters
+            } else {
+                // Turn ON
+                isDriveTimeMode = true;
+                document.getElementById('driveTimePanel').classList.remove('hidden');
+                document.getElementById('driveTimeBtn').classList.remove('bg-emerald-600');
+                document.getElementById('driveTimeBtn').classList.add('bg-emerald-800');
+                
+                // Clear any current selections just in case
+                dtStartId = null;
+                dtEndId = null;
+                updateDriveTimeUI();
+            }
+        }
+
+        function clearDriveTimeRoute() {
+            dtStartId = null;
+            dtEndId = null;
+            if (routeLayer) {
+                map.removeLayer(routeLayer);
+                routeLayer = null;
+            }
+            document.getElementById('driveTimeResults').classList.add('hidden');
+            updateDriveTimeUI();
+            
+            // Restore visibility of all filtered markers
+            // We use renderMarkers with currentFilteredData to show everyone again
+            renderMarkers(currentFilteredData); 
+        }
+
+        function handleDriveTimeClick(id) {
+            // Check for double click on same marker
+            if (dtStartId === id || dtEndId === id) {
+                // Cannot select same point twice
+                return;
+            }
+
+            if (!dtStartId) {
+                // 1. Select First Point
+                dtStartId = id;
+                updateDriveTimeUI();
+                refreshDriveTimeMarkers(); // Update icon styles
+            } else if (!dtEndId) {
+                // 2. Select Second Point & Calculate
+                dtEndId = id;
+                updateDriveTimeUI();
+                refreshDriveTimeMarkers();
+                calculateRoute();
+            } else {
+                // 3. Third Click -> Reset to new Start Point
+                dtStartId = id;
+                dtEndId = null;
+                if (routeLayer) {
+                    map.removeLayer(routeLayer);
+                    routeLayer = null;
+                }
+                document.getElementById('driveTimeResults').classList.add('hidden');
+                updateDriveTimeUI();
+                
+                // Reset map to show all candidates again so user can pick a 2nd point
+                renderMarkers(currentFilteredData); 
+                // Then manually highlight the new start point
+                refreshDriveTimeMarkers();
+            }
+        }
+
+        function updateDriveTimeUI() {
+            const startEl = document.getElementById('dtStartText');
+            const endEl = document.getElementById('dtEndText');
+            const statusEl = document.getElementById('dtStatusText');
+
+            // Find Objects
+            const startItem = listings.find(i => String(i.id) === String(dtStartId));
+            const endItem = listings.find(i => String(i.id) === String(dtEndId));
+
+            startEl.textContent = startItem ? truncate(startItem.title) : "Click a pin on the map";
+            endEl.textContent = endItem ? truncate(endItem.title) : "Click another pin on the map";
+
+            if (!dtStartId) {
+                statusEl.textContent = "Select two points to calculate drive time";
+                statusEl.className = "text-gray-800 font-medium";
+            } else if (!dtEndId) {
+                statusEl.textContent = "First point selected, now choose a second point";
+                statusEl.className = "text-emerald-700 font-bold";
+            } else {
+                statusEl.textContent = "Route calculated";
+                statusEl.className = "text-emerald-700 font-bold";
+            }
+        }
+
+        function truncate(str) {
+            return str.length > 30 ? str.substring(0, 30) + '...' : str;
+        }
+
+        function refreshDriveTimeMarkers() {
+            // Update marker icons to show "1" and "2" badges
+            for (let mId in markers) {
+                const mIdStr = String(mId);
+                let dtIndex = 0;
+                if (mIdStr === String(dtStartId)) dtIndex = 1;
+                if (mIdStr === String(dtEndId)) dtIndex = 2;
+
+                const isFav = favorites.includes(mIdStr);
+                const isActive = activeId === mIdStr; // Keep active logic if user clicked sidebar?
+                
+                markers[mId].setIcon(getIcon(isActive, isFav, dtIndex));
+                
+                // Ensure selected markers are on top
+                if (dtIndex > 0) markers[mId].setZIndexOffset(2000);
+                else markers[mId].setZIndexOffset(0);
+            }
+        }
+
+        async function calculateRoute() {
+            const startItem = listings.find(i => String(i.id) === String(dtStartId));
+            const endItem = listings.find(i => String(i.id) === String(dtEndId));
+
+            if (!startItem || !endItem) return;
+
+            const url = `https://router.project-osrm.org/route/v1/driving/${startItem.lng},${startItem.lat};${endItem.lng},${endItem.lat}?overview=full&geometries=geojson`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.routes && data.routes.length > 0) {
+                    const route = data.routes[0];
+                    const geoJson = route.geometry;
+                    
+                    // Draw Route
+                    if (routeLayer) map.removeLayer(routeLayer);
+                    routeLayer = L.geoJSON(geoJson, {
+                        style: { color: '#059669', weight: 5, opacity: 0.8 }
+                    }).addTo(map);
+
+                    // Fit Bounds
+                    const bounds = routeLayer.getBounds();
+                    map.fitBounds(bounds.pad(0.2));
+
+                    // Filter UI to ONLY show these two points
+                    renderMarkers([startItem, endItem]); // Only render the 2 pins
+                    
+                    // Show Results
+                    showDriveTimeResults(route.distance, route.duration, startItem, endItem);
+                } else {
+                    document.getElementById('dtStatusText').textContent = "Unable to calculate route. Try again.";
+                    document.getElementById('dtStatusText').className = "text-red-600 font-bold";
+                }
+            } catch (error) {
+                console.error("Routing Error", error);
+                document.getElementById('dtStatusText').textContent = "Routing service error.";
+                document.getElementById('dtStatusText').className = "text-red-600 font-bold";
+            }
+        }
+
+        function showDriveTimeResults(distMeters, durSeconds, start, end) {
+            const miles = (distMeters / 1609.34).toFixed(1);
+            const minutes = Math.round(durSeconds / 60);
+
+            document.getElementById('resTime').innerText = `${minutes} min`;
+            document.getElementById('resDist').innerText = `${miles} miles`;
+            
+            // Google Maps Link
+            const gMapsUrl = `https://www.google.com/maps/dir/${start.lat},${start.lng}/${end.lat},${end.lng}/`;
+            document.getElementById('googleMapsLink').href = gMapsUrl;
+
+            document.getElementById('driveTimeResults').classList.remove('hidden');
+        }
+
+
+        // --- MAP & LIST LOGIC ---
+
         function updateListBasedOnBounds() {
+            // In Drive Time mode, if we have a route, we force the list to only show the 2 selected points
+            // This is handled by renderMarkers([start, end]) called in calculateRoute
+            // But if user pans map manually in DT mode, we might want to respect bounds? 
+            // Requirement says "Filter visible homes to just those two selected points". 
+            // So standard bounds logic only applies if NOT in route view.
+            
+            if (isDriveTimeMode && dtStartId && dtEndId) {
+                // Do nothing, list is already restricted to 2 items
+                return; 
+            }
+
             const bounds = map.getBounds();
             const visibleListings = currentFilteredData.filter(item => {
                 const latLng = L.latLng(item.lat, item.lng);
@@ -459,9 +740,14 @@
             localStorage.setItem('myFavorites', JSON.stringify(favorites));
             
             if (markers[strId]) {
+                // Refresh icon styling (handles favorite heart vs drive time badge)
+                let dtIndex = 0;
+                if (String(strId) === String(dtStartId)) dtIndex = 1;
+                if (String(strId) === String(dtEndId)) dtIndex = 2;
+                
                 const isActive = activeId === strId;
                 const isFav = favorites.includes(strId);
-                markers[strId].setIcon(getIcon(isActive, isFav));
+                markers[strId].setIcon(getIcon(isActive, isFav, dtIndex));
             }
 
             if (isFavFilterActive) applyFilters();
@@ -547,9 +833,7 @@
                 const matchType = type === "" || rd["PROPERTY TYPE"] === type;
                 
                 // Time
-                // Starts By X: Item Start (1100) <= Filter (1200)
                 const matchTimeStart = timeStart === null || rd["24 Start Time"] <= timeStart;
-                // Ends After Y: Item End (1500) >= Filter (1400)
                 const matchTimeEnd = timeEnd === null || rd["24 End Time"] >= timeEnd;
 
                 // Thresholds (Min)
@@ -567,11 +851,13 @@
                        matchSqft && matchLot && matchYear && matchDom && matchPpsf && matchHoa;
             });
 
+            // Re-render
             renderMarkers(currentFilteredData);
         }
 
         // --- RENDER ---
         function renderMarkers(data) {
+            // Clear existing markers
             for (let id in markers) {
                 map.removeLayer(markers[id]);
             }
@@ -580,8 +866,15 @@
             data.forEach(item => {
                 const isActive = activeId === item.id;
                 const isFav = favorites.includes(String(item.id));
-                const marker = L.marker([item.lat, item.lng], { icon: getIcon(isActive, isFav) }).addTo(map);
                 
+                // Check Drive Time State
+                let dtIndex = 0;
+                if (String(item.id) === String(dtStartId)) dtIndex = 1;
+                if (String(item.id) === String(dtEndId)) dtIndex = 2;
+
+                const marker = L.marker([item.lat, item.lng], { icon: getIcon(isActive, isFav, dtIndex) }).addTo(map);
+                
+                // Add popup content
                 marker.bindPopup(`
                     <div class="text-center">
                         <strong class="block text-gray-800 text-sm mb-1">${item.title}</strong>
@@ -590,13 +883,22 @@
                 `);
 
                 marker.on('click', () => {
-                    handleListingSelection(item.id, false); 
-                    scrollToCard(item.id);
+                    if (isDriveTimeMode) {
+                        handleDriveTimeClick(item.id);
+                        marker.closePopup(); // Prevent popup in selection mode if preferred
+                    } else {
+                        handleListingSelection(item.id, false); 
+                        scrollToCard(item.id);
+                    }
                 });
                 markers[item.id] = marker;
             });
 
-            if (data.length > 0 && !activeId) {
+            // Update Sidebar for these markers
+            renderSidebar(data);
+
+            // Fit bounds only if not in Drive Time Route Mode (route layer handles its own bounds)
+            if (data.length > 0 && !activeId && !routeLayer) {
                 const group = new L.featureGroup(data.map(i => markers[i.id]));
                 map.fitBounds(group.getBounds().pad(0.1));
             }
@@ -653,6 +955,9 @@
         }
 
         function handleListingSelection(id, shouldPan) {
+            // Standard selection logic (disabled or secondary in Drive Time mode)
+            if (isDriveTimeMode) return; 
+
             activeId = id;
             document.querySelectorAll('#listings-container > div').forEach(el => el.classList.remove('card-active'));
             const currCard = document.getElementById(`listing-${id}`);
@@ -663,7 +968,10 @@
                 const marker = markers[mId];
                 const isFav = favorites.includes(String(mId));
                 
-                marker.setIcon(getIcon(isTarget, isFav));
+                // Only update standard icons, preserve DT badges if somehow mixed?
+                // Currently listing selection disabled in DT mode to prevent conflicts
+                marker.setIcon(getIcon(isTarget, isFav, 0));
+                
                 if (isTarget) {
                     marker.setZIndexOffset(1000);
                     if (shouldPan) map.panTo(marker.getLatLng());
