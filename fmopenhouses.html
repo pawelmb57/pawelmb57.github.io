@@ -87,8 +87,8 @@
             z-index: 10;
         }
 
-        /* Vertical Text for Collapsed Sidebar */
-        .vertical-text {
+        /* Vertical Text for Collapsed Sidebar (Desktop) */
+        .vertical-text-desktop {
             writing-mode: vertical-rl;
             text-orientation: mixed;
             transform: rotate(180deg);
@@ -197,13 +197,18 @@
     <div class="flex flex-col-reverse md:flex-row flex-1 overflow-hidden relative layout-container">
         
         <!-- Sidebar Listing View -->
-        <!-- Added transition for width change, and ID for JS control -->
-        <div id="sidebar" class="w-full md:w-[40%] bg-white shadow-lg z-20 flex flex-col transition-all duration-300 relative border-r border-gray-200">
+        <!-- Added explicit mobile height class h-[45vh] for expanded state, md:h-auto resets it for desktop flex -->
+        <div id="sidebar" class="w-full md:w-[40%] h-[45vh] md:h-auto bg-white shadow-lg z-20 flex flex-col transition-all duration-300 relative border-r border-gray-200">
             
             <!-- Collapse Button (Desktop Only) -->
             <button onclick="toggleSidebar()" class="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-12 bg-white border border-gray-300 rounded-r items-center justify-center cursor-pointer hover:bg-gray-50 z-30 shadow-md text-gray-500 hover:text-blue-600 transition-colors">
                 <i id="collapseIcon" class="fa-solid fa-chevron-left"></i>
             </button>
+
+            <!-- Mobile Collapse Handle (Mobile Only) -->
+            <div onclick="toggleSidebar()" class="md:hidden w-full h-8 shrink-0 bg-gray-50 border-b border-gray-200 flex items-center justify-center cursor-pointer text-gray-400 hover:text-blue-600 z-30">
+                 <i id="mobileCollapseIcon" class="fa-solid fa-chevron-down"></i>
+            </div>
 
             <!-- List Content -->
             <div id="listings-content" class="flex-1 overflow-y-auto listing-scroll">
@@ -213,9 +218,14 @@
             </div>
 
             <!-- Collapsed Placeholder -->
-            <div id="collapsed-placeholder" class="hidden h-full flex-col items-center justify-center cursor-pointer hover:bg-gray-50 text-gray-400 hover:text-blue-600 gap-2 p-2 text-center transition-colors" onclick="toggleSidebar()">
-                <i class="fa-solid fa-chevron-right text-xl"></i>
-                <span class="text-sm font-bold vertical-text uppercase tracking-widest">Click to show list</span>
+            <!-- Modified to work horizontally on mobile and vertically on desktop -->
+            <div id="collapsed-placeholder" class="hidden h-full md:h-full w-full md:w-full flex-row md:flex-col items-center justify-center cursor-pointer hover:bg-gray-50 text-gray-400 hover:text-blue-600 gap-2 p-2 text-center transition-colors" onclick="toggleSidebar()">
+                
+                <!-- Icons pivot based on screen size -->
+                <i class="fa-solid fa-chevron-up md:hidden text-lg"></i>
+                <i class="fa-solid fa-chevron-right hidden md:inline text-xl"></i>
+                
+                <span class="text-xs md:text-sm font-bold md:vertical-text-desktop uppercase tracking-widest">Click to show list</span>
             </div>
         </div>
 
@@ -541,26 +551,50 @@
             const sidebar = document.getElementById('sidebar');
             const content = document.getElementById('listings-content');
             const placeholder = document.getElementById('collapsed-placeholder');
-            const icon = document.getElementById('collapseIcon');
+            const desktopIcon = document.getElementById('collapseIcon');
+            const mobileIcon = document.getElementById('mobileCollapseIcon');
 
             if (isSidebarCollapsed) {
-                // Collapse
+                // COLLAPSE
+                
+                // Desktop: width -> 10%
                 sidebar.classList.remove('md:w-[40%]');
                 sidebar.classList.add('md:w-[10%]');
+                
+                // Mobile: height -> 60px (just enough for placeholder)
+                sidebar.classList.remove('h-[45vh]');
+                sidebar.classList.add('h-[12vh]'); // Approx 10-12% for mobile collapse
+
                 content.classList.add('hidden');
                 placeholder.classList.remove('hidden');
                 placeholder.classList.add('flex');
-                icon.classList.remove('fa-chevron-left');
-                icon.classList.add('fa-chevron-right');
+                
+                // Icons
+                desktopIcon.classList.remove('fa-chevron-left');
+                desktopIcon.classList.add('fa-chevron-right');
+                mobileIcon.classList.remove('fa-chevron-down');
+                mobileIcon.classList.add('fa-chevron-up');
+
             } else {
-                // Expand
+                // EXPAND
+                
+                // Desktop: width -> 40%
                 sidebar.classList.remove('md:w-[10%]');
                 sidebar.classList.add('md:w-[40%]');
+                
+                // Mobile: height -> 45vh
+                sidebar.classList.remove('h-[12vh]');
+                sidebar.classList.add('h-[45vh]');
+
                 content.classList.remove('hidden');
                 placeholder.classList.remove('flex');
                 placeholder.classList.add('hidden');
-                icon.classList.remove('fa-chevron-right');
-                icon.classList.add('fa-chevron-left');
+                
+                // Icons
+                desktopIcon.classList.remove('fa-chevron-right');
+                desktopIcon.classList.add('fa-chevron-left');
+                mobileIcon.classList.remove('fa-chevron-up');
+                mobileIcon.classList.add('fa-chevron-down');
             }
 
             // Trigger map resize after transition
@@ -877,7 +911,7 @@
             if (isFavFilterActive) {
                 btn.classList.add('bg-red-50', 'border-red-200', 'text-red-600');
                 btn.classList.remove('text-gray-600', 'hover:bg-gray-50');
-                btn.innerHTML = `<i class="fa-solid fa-heart text-red-500"></i> <span class="hidden sm:inline">Favorites</span>`;
+                btn.innerHTML = `<i class="fa-solid fa-heart text-red-500"></i> <span class="hidden sm:inline">Saved</span>`;
             } else {
                 btn.classList.remove('bg-red-50', 'border-red-200', 'text-red-600');
                 btn.classList.add('text-gray-600', 'hover:bg-gray-50');
