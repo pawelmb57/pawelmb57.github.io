@@ -35,15 +35,18 @@
 
         /* Map height calculation to fill screen minus header */
         #map {
-            height: 50vh;
+            height: 100%;
             width: 100%;
             z-index: 1;
         }
 
-        @media (min-width: 768px) {
-            #map {
-                height: calc(100vh - 80px); /* Full height minus header */
-            }
+        /* Responsive Layout Adjustments */
+        .layout-container {
+            height: calc(100vh - 64px); /* Default height minus header approx */
+        }
+        
+        body.drive-time-active .layout-container {
+            height: calc(100vh - 140px); /* Adjust for drive time panel */
         }
 
         .card-active {
@@ -84,6 +87,13 @@
             z-index: 10;
         }
 
+        /* Vertical Text for Collapsed Sidebar */
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+        }
+
         /* Modal Animation */
         .modal-enter {
             opacity: 0;
@@ -106,80 +116,77 @@
 <body class="bg-gray-50 h-screen flex flex-col overflow-hidden relative">
 
     <!-- Header / Filter Bar -->
-    <header class="bg-white shadow-md z-20 p-4 shrink-0 flex flex-col gap-4">
+    <header class="bg-white shadow-md z-30 sticky top-0 flex flex-col">
         
         <!-- Top Row: Controls -->
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
+        <div class="flex items-center justify-between p-2 h-16 w-full overflow-hidden">
+            <div class="flex items-center gap-2 shrink-0">
                 <i class="fa-solid fa-map-location-dot text-blue-600 text-2xl"></i>
-                <h1 class="text-xl font-bold text-gray-800 hidden sm:block">Fort Myers Hunt</h1>
+                <h1 class="text-lg font-bold text-gray-800 hidden md:block whitespace-nowrap">Fort Myers Hunt</h1>
             </div>
 
             <!-- Filters & Tools -->
-            <div class="flex gap-2 sm:gap-4 overflow-x-auto items-center">
+            <div class="flex gap-2 items-center flex-nowrap overflow-x-auto no-scrollbar ml-2">
                 
-                <!-- Favorites Toggle -->
-                <button id="favFilterBtn" onclick="toggleFavFilter()" class="border border-gray-300 text-gray-600 px-3 py-1 rounded text-sm hover:bg-gray-50 flex items-center gap-2 transition whitespace-nowrap">
-                    <i class="fa-regular fa-heart text-red-500"></i> <span class="hidden sm:inline">Favorites</span>
-                </button>
-                
-                <div class="h-6 w-px bg-gray-300 mx-1"></div>
-
                 <!-- Date Filter -->
-                <div class="flex items-center gap-2">
-                    <label class="text-sm text-gray-600 hidden sm:block">Date:</label>
-                    <select id="dateFilter" onchange="applyFilters()" class="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500 bg-white">
+                <div class="flex items-center gap-1 shrink-0">
+                    <select id="dateFilter" onchange="applyFilters()" class="border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:border-blue-500 bg-white max-w-[140px] truncate">
                         <option value="all">All Dates</option>
                         <!-- Dates populated dynamically -->
                     </select>
                 </div>
 
+                <!-- Favorites Toggle -->
+                <button id="favFilterBtn" onclick="toggleFavFilter()" class="border border-gray-300 text-gray-600 px-3 py-1.5 rounded text-sm hover:bg-gray-50 flex items-center gap-2 transition whitespace-nowrap shrink-0">
+                    <i class="fa-regular fa-heart text-red-500"></i> <span class="hidden sm:inline">Favorites</span>
+                </button>
+
                 <!-- Advanced Filters Button -->
-                <button onclick="openFilterModal()" class="bg-blue-600 text-white px-4 py-1.5 rounded text-sm hover:bg-blue-700 transition flex items-center gap-2 whitespace-nowrap shadow-sm">
-                    <i class="fa-solid fa-sliders"></i> Filters
+                <button onclick="openFilterModal()" class="bg-blue-600 text-white px-3 py-1.5 rounded text-sm hover:bg-blue-700 transition flex items-center gap-2 whitespace-nowrap shrink-0">
+                    <i class="fa-solid fa-sliders"></i> <span class="hidden sm:inline">Filters</span>
                 </button>
 
                 <!-- Drive Time Button -->
-                <button id="driveTimeBtn" onclick="toggleDriveTimeMode()" class="bg-emerald-600 text-white px-4 py-1.5 rounded text-sm hover:bg-emerald-700 transition flex items-center gap-2 whitespace-nowrap shadow-sm">
-                    <i class="fa-solid fa-car"></i> Drive Time
+                <button id="driveTimeBtn" onclick="toggleDriveTimeMode()" class="bg-emerald-600 text-white px-3 py-1.5 rounded text-sm hover:bg-emerald-700 transition flex items-center gap-2 whitespace-nowrap shrink-0">
+                    <i class="fa-solid fa-car"></i> <span class="hidden sm:inline">Drive Time</span>
                 </button>
             </div>
         </div>
 
         <!-- Drive Time Panel (Hidden by default) -->
-        <div id="driveTimePanel" class="hidden bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-sm">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+        <div id="driveTimePanel" class="hidden bg-emerald-50 border-t border-emerald-200 p-2 text-sm w-full">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-2 items-center">
                 <!-- Col 1: Start -->
                 <div class="flex flex-col">
-                    <span class="font-bold text-emerald-800 text-xs uppercase">Select First Point</span>
-                    <span id="dtStartText" class="text-gray-600 truncate">Click a pin on the map</span>
+                    <span class="font-bold text-emerald-800 text-[10px] uppercase">Start Point</span>
+                    <span id="dtStartText" class="text-gray-600 truncate text-xs">Click map pin</span>
                 </div>
                 <!-- Col 2: End -->
                 <div class="flex flex-col">
-                    <span class="font-bold text-emerald-800 text-xs uppercase">Select Second Point</span>
-                    <span id="dtEndText" class="text-gray-600 truncate">Click another pin on the map</span>
+                    <span class="font-bold text-emerald-800 text-[10px] uppercase">End Point</span>
+                    <span id="dtEndText" class="text-gray-600 truncate text-xs">Click map pin</span>
                 </div>
                 <!-- Col 3: Status -->
                 <div class="flex flex-col">
-                    <span class="font-bold text-emerald-800 text-xs uppercase">Status</span>
-                    <span id="dtStatusText" class="text-gray-800 font-medium">Select two points to calculate drive time</span>
+                    <span class="font-bold text-emerald-800 text-[10px] uppercase">Status</span>
+                    <span id="dtStatusText" class="text-gray-800 font-medium text-xs">Select 2 points</span>
                 </div>
                 <!-- Col 4: Controls -->
                 <div class="flex gap-2 justify-end">
-                    <button onclick="clearDriveTimeRoute()" class="px-3 py-1 bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50 text-xs">Clear Route</button>
-                    <button onclick="toggleDriveTimeMode()" class="px-3 py-1 bg-gray-200 border border-gray-300 rounded text-gray-700 hover:bg-gray-300 text-xs">Close / Reset</button>
+                    <button onclick="clearDriveTimeRoute()" class="px-2 py-1 bg-white border border-gray-300 rounded text-gray-700 hover:bg-gray-50 text-xs">Clear</button>
+                    <button onclick="toggleDriveTimeMode()" class="px-2 py-1 bg-gray-200 border border-gray-300 rounded text-gray-700 hover:bg-gray-300 text-xs">Close</button>
                 </div>
             </div>
 
             <!-- Results Section (Hidden until route calculated) -->
-            <div id="driveTimeResults" class="hidden mt-3 pt-3 border-t border-emerald-200">
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <div class="text-emerald-900">
-                        <span class="font-bold text-lg mr-4"><i class="fa-regular fa-clock"></i> <span id="resTime">-- min</span></span>
-                        <span class="text-gray-600"><i class="fa-solid fa-road"></i> <span id="resDist">-- miles</span></span>
+            <div id="driveTimeResults" class="hidden mt-2 pt-2 border-t border-emerald-200">
+                <div class="flex justify-between items-center gap-4">
+                    <div class="text-emerald-900 text-xs">
+                        <span class="font-bold mr-2"><i class="fa-regular fa-clock"></i> <span id="resTime">--</span></span>
+                        <span class="text-gray-600"><i class="fa-solid fa-road"></i> <span id="resDist">--</span></span>
                     </div>
-                    <a id="googleMapsLink" href="#" target="_blank" class="bg-white border border-emerald-500 text-emerald-700 hover:bg-emerald-50 px-4 py-1.5 rounded text-xs font-bold transition flex items-center gap-2">
-                        <i class="fa-brands fa-google"></i> Show Route with Traffic
+                    <a id="googleMapsLink" href="#" target="_blank" class="bg-white border border-emerald-500 text-emerald-700 hover:bg-emerald-50 px-3 py-1 rounded text-[10px] font-bold transition flex items-center gap-1">
+                        <i class="fa-brands fa-google"></i> Route
                     </a>
                 </div>
             </div>
@@ -187,18 +194,36 @@
     </header>
 
     <!-- Main Content -->
-    <div class="flex flex-col-reverse md:flex-row flex-1 overflow-hidden relative">
+    <div class="flex flex-col-reverse md:flex-row flex-1 overflow-hidden relative layout-container">
         
         <!-- Sidebar Listing View -->
-        <div class="w-full md:w-1/3 lg:w-1/4 bg-white shadow-lg z-10 overflow-y-auto listing-scroll" id="listings-container">
-            <!-- Listings will be injected here via JS -->
+        <!-- Added transition for width change, and ID for JS control -->
+        <div id="sidebar" class="w-full md:w-[40%] bg-white shadow-lg z-20 flex flex-col transition-all duration-300 relative border-r border-gray-200">
+            
+            <!-- Collapse Button (Desktop Only) -->
+            <button onclick="toggleSidebar()" class="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-12 bg-white border border-gray-300 rounded-r items-center justify-center cursor-pointer hover:bg-gray-50 z-30 shadow-md text-gray-500 hover:text-blue-600 transition-colors">
+                <i id="collapseIcon" class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <!-- List Content -->
+            <div id="listings-content" class="flex-1 overflow-y-auto listing-scroll">
+                <div id="listings-container">
+                    <!-- Listings will be injected here via JS -->
+                </div>
+            </div>
+
+            <!-- Collapsed Placeholder -->
+            <div id="collapsed-placeholder" class="hidden h-full flex-col items-center justify-center cursor-pointer hover:bg-gray-50 text-gray-400 hover:text-blue-600 gap-2 p-2 text-center transition-colors" onclick="toggleSidebar()">
+                <i class="fa-solid fa-chevron-right text-xl"></i>
+                <span class="text-sm font-bold vertical-text uppercase tracking-widest">Click to show list</span>
+            </div>
         </div>
 
         <!-- Map View -->
-        <div class="w-full md:w-2/3 lg:w-3/4 relative bg-gray-200">
+        <div class="flex-1 relative bg-gray-200">
             <div id="map"></div>
-            <!-- Map Overlay Info -->
-            <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-2 rounded shadow text-xs z-[1000] pointer-events-none">
+            <!-- Map Overlay Info (Lowered Z-Index to 10) -->
+            <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-2 rounded shadow text-xs z-10 pointer-events-none">
                 <i class="fa-solid fa-arrows-up-down-left-right mr-1"></i> Move map to update list
             </div>
         </div>
@@ -420,6 +445,7 @@
         let currentFilteredData = [...listings];
         let favorites = [];
         let isFavFilterActive = false;
+        let isSidebarCollapsed = false;
         
         // Drive Time State
         let isDriveTimeMode = false;
@@ -437,7 +463,22 @@
                 if (saved) favorites = JSON.parse(saved);
             } catch (e) { console.log("Local storage error"); }
 
+            // Set Default Date to "Saturday Dec 06" if available
+            const dateSelect = document.getElementById('dateFilter');
+            const targetDate = "Saturday Dec 06";
+            let found = false;
+            for(let i=0; i<dateSelect.options.length; i++) {
+                if(dateSelect.options[i].value === targetDate) {
+                    dateSelect.selectedIndex = i;
+                    found = true;
+                    break;
+                }
+            }
+
             initMap();
+            
+            // Apply initial filters (forces the date check)
+            applyFilters();
 
             // Restore Saved Drive Time Route
             const savedRoute = localStorage.getItem('savedRoute');
@@ -493,6 +534,41 @@
                 typeSelect.appendChild(opt);
             });
         }
+
+        // --- LAYOUT LOGIC ---
+        function toggleSidebar() {
+            isSidebarCollapsed = !isSidebarCollapsed;
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('listings-content');
+            const placeholder = document.getElementById('collapsed-placeholder');
+            const icon = document.getElementById('collapseIcon');
+
+            if (isSidebarCollapsed) {
+                // Collapse
+                sidebar.classList.remove('md:w-[40%]');
+                sidebar.classList.add('md:w-[10%]');
+                content.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+                placeholder.classList.add('flex');
+                icon.classList.remove('fa-chevron-left');
+                icon.classList.add('fa-chevron-right');
+            } else {
+                // Expand
+                sidebar.classList.remove('md:w-[10%]');
+                sidebar.classList.add('md:w-[40%]');
+                content.classList.remove('hidden');
+                placeholder.classList.remove('flex');
+                placeholder.classList.add('hidden');
+                icon.classList.remove('fa-chevron-right');
+                icon.classList.add('fa-chevron-left');
+            }
+
+            // Trigger map resize after transition
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 350);
+        }
+
 
         // --- CUSTOM ICONS ---
         function getIcon(isActive, isFav, dtIndex) {
@@ -554,6 +630,7 @@
                 isDriveTimeMode = false;
                 clearDriveTimeRoute(); // Resets selections & map & clears storage
                 document.getElementById('driveTimePanel').classList.add('hidden');
+                document.body.classList.remove('drive-time-active');
                 document.getElementById('driveTimeBtn').classList.remove('bg-emerald-800');
                 document.getElementById('driveTimeBtn').classList.add('bg-emerald-600');
                 
@@ -563,6 +640,7 @@
                 // Turn ON
                 isDriveTimeMode = true;
                 document.getElementById('driveTimePanel').classList.remove('hidden');
+                document.body.classList.add('drive-time-active');
                 document.getElementById('driveTimeBtn').classList.remove('bg-emerald-600');
                 document.getElementById('driveTimeBtn').classList.add('bg-emerald-800');
                 
@@ -638,23 +716,23 @@
             const startItem = listings.find(i => String(i.id) === String(dtStartId));
             const endItem = listings.find(i => String(i.id) === String(dtEndId));
 
-            startEl.textContent = startItem ? truncate(startItem.title) : "Click a pin on the map";
-            endEl.textContent = endItem ? truncate(endItem.title) : "Click another pin on the map";
+            startEl.textContent = startItem ? truncate(startItem.title) : "Click map pin";
+            endEl.textContent = endItem ? truncate(endItem.title) : "Click map pin";
 
             if (!dtStartId) {
-                statusEl.textContent = "Select two points to calculate drive time";
-                statusEl.className = "text-gray-800 font-medium";
+                statusEl.textContent = "Select 2 points";
+                statusEl.className = "text-gray-800 font-medium text-xs";
             } else if (!dtEndId) {
-                statusEl.textContent = "First point selected, now choose a second point";
-                statusEl.className = "text-emerald-700 font-bold";
+                statusEl.textContent = "Choose 2nd point";
+                statusEl.className = "text-emerald-700 font-bold text-xs";
             } else {
                 statusEl.textContent = "Route calculated";
-                statusEl.className = "text-emerald-700 font-bold";
+                statusEl.className = "text-emerald-700 font-bold text-xs";
             }
         }
 
         function truncate(str) {
-            return str.length > 30 ? str.substring(0, 30) + '...' : str;
+            return str.length > 20 ? str.substring(0, 20) + '...' : str;
         }
 
         function refreshDriveTimeMarkers() {
@@ -712,13 +790,13 @@
                     localStorage.setItem('savedRoute', JSON.stringify({ startId: dtStartId, endId: dtEndId }));
 
                 } else {
-                    document.getElementById('dtStatusText').textContent = "Unable to calculate route. Try again.";
-                    document.getElementById('dtStatusText').className = "text-red-600 font-bold";
+                    document.getElementById('dtStatusText').textContent = "Route failed";
+                    document.getElementById('dtStatusText').className = "text-red-600 font-bold text-xs";
                 }
             } catch (error) {
                 console.error("Routing Error", error);
-                document.getElementById('dtStatusText').textContent = "Routing service error.";
-                document.getElementById('dtStatusText').className = "text-red-600 font-bold";
+                document.getElementById('dtStatusText').textContent = "Service error";
+                document.getElementById('dtStatusText').className = "text-red-600 font-bold text-xs";
             }
         }
 
@@ -799,7 +877,7 @@
             if (isFavFilterActive) {
                 btn.classList.add('bg-red-50', 'border-red-200', 'text-red-600');
                 btn.classList.remove('text-gray-600', 'hover:bg-gray-50');
-                btn.innerHTML = `<i class="fa-solid fa-heart text-red-500"></i> <span class="hidden sm:inline">Saved</span>`;
+                btn.innerHTML = `<i class="fa-solid fa-heart text-red-500"></i> <span class="hidden sm:inline">Favorites</span>`;
             } else {
                 btn.classList.remove('bg-red-50', 'border-red-200', 'text-red-600');
                 btn.classList.add('text-gray-600', 'hover:bg-gray-50');
