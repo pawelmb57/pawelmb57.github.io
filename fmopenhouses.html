@@ -3,210 +3,306 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fort Myers & Cape Coral Scouting Trip</title>
+    <title>Fort Myers Open Houses</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRS9BMY="
      crossorigin=""/>
-     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <style>
-        #map { height: 500px; width: 100%; border-radius: 0.5rem; }
-        .day-card { border-left: 4px solid; }
-        .day-1 { border-color: #3B82F6; } /* Blue */
-        .day-2 { border-color: #EF4444; } /* Red */
-    </style>
-</head>
-<body class="bg-gray-50 text-gray-800 font-sans p-4">
-
-    <div class="max-w-4xl mx-auto">
-        
-        <!-- Header -->
-        <header class="mb-6 text-center">
-            <h1 class="text-3xl font-bold text-gray-900">Fort Myers & Cape Coral Scouting Trip</h1>
-            <p class="text-gray-600 mt-2">Two Days. Two Vibes. One Decision.</p>
-        </header>
-
-        <!-- Map Container -->
-        <div class="bg-white p-4 rounded-lg shadow-md mb-8">
-            <div id="map" class="z-0"></div>
-            <div class="mt-2 text-sm text-gray-500 flex gap-4 justify-center">
-                <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-blue-500 mr-1"></span> Friday (Inland/Space)</span>
-                <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-red-500 mr-1"></span> Saturday (Cape Coral/Water)</span>
-            </div>
-        </div>
-
-        <!-- Itinerary Cards -->
-        <div class="grid md:grid-cols-2 gap-6">
-
-            <!-- Friday Column -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <div class="bg-blue-600 text-white p-4">
-                    <h2 class="text-xl font-bold">Day 1: Friday (Dec 5)</h2>
-                    <p class="text-blue-100 text-sm">The "Space & Privacy" Tour (East of I-75)</p>
-                </div>
-                <div class="p-4 space-y-6">
-                    
-                    <!-- Stop 1 -->
-                    <div class="day-card day-1 pl-4">
-                        <span class="text-xs font-bold text-blue-600 uppercase tracking-wide">11:00 AM • Start</span>
-                        <h3 class="font-bold text-lg">Hawks Preserve</h3>
-                        <p class="text-sm text-gray-600 mb-1">2501 Hawks Preserve Dr, Fort Myers</p>
-                        <p class="text-sm italic text-gray-500 mb-2">"Is this too far out, or just peaceful enough?"</p>
-                        <a href="https://www.google.com/maps/search/?api=1&query=2501+Hawks+Preserve+Dr+Fort+Myers+FL" target="_blank" class="text-blue-600 hover:underline text-sm font-semibold">📍 Navigate Here</a>
-                    </div>
-
-                    <!-- Stop 2 -->
-                    <div class="day-card day-1 pl-4">
-                        <span class="text-xs font-bold text-blue-600 uppercase tracking-wide">12:00 PM • The Rural Vibe</span>
-                        <h3 class="font-bold text-lg">Buckingham Area (Bentley Crossing)</h3>
-                        <p class="text-sm text-gray-600 mb-1">1168 Brooklands Dr, Fort Myers</p>
-                        <p class="text-sm italic text-gray-500 mb-2">Larger lots, rural feel. Very different from the coast.</p>
-                        <a href="https://www.google.com/maps/search/?api=1&query=1168+Brooklands+Dr+Fort+Myers+FL" target="_blank" class="text-blue-600 hover:underline text-sm font-semibold">📍 Navigate Here</a>
-                    </div>
-
-                    <!-- Stop 3 -->
-                    <div class="day-card day-1 pl-4">
-                        <span class="text-xs font-bold text-blue-600 uppercase tracking-wide">1:00 PM • The Villa Test</span>
-                        <h3 class="font-bold text-lg">Hemingway Pointe</h3>
-                        <p class="text-sm text-gray-600 mb-1">14168 Hemingway Oaks Trl, Fort Myers</p>
-                        <p class="text-sm italic text-gray-500 mb-2">Test: "Could I live with a shared wall if I never had to mow?"</p>
-                        <a href="https://www.google.com/maps/search/?api=1&query=14168+Hemingway+Oaks+Trl+Fort+Myers+FL" target="_blank" class="text-blue-600 hover:underline text-sm font-semibold">📍 Navigate Here</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- Saturday Column -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <div class="bg-red-600 text-white p-4">
-                    <h2 class="text-xl font-bold">Day 2: Saturday (Dec 6)</h2>
-                    <p class="text-red-100 text-sm">The "Cape Coral" Deep Dive</p>
-                </div>
-                <div class="p-4 space-y-6">
-
-                    <!-- Stop 1 -->
-                    <div class="day-card day-2 pl-4">
-                        <span class="text-xs font-bold text-red-600 uppercase tracking-wide">11:00 AM • Newer / Freshwater</span>
-                        <h3 class="font-bold text-lg">SW Cape (Newer Build)</h3>
-                        <p class="text-sm text-gray-600 mb-1">1217 SW 15th Ter, Cape Coral</p>
-                        <p class="text-sm italic text-gray-500 mb-2">Freshwater canal. Better value, lower insurance age (2017).</p>
-                        <a href="https://www.google.com/maps/search/?api=1&query=1217+SW+15th+Ter+Cape+Coral+FL" target="_blank" class="text-red-600 hover:underline text-sm font-semibold">📍 Navigate Here</a>
-                    </div>
-
-                    <!-- Stop 2 -->
-                    <div class="day-card day-2 pl-4">
-                        <span class="text-xs font-bold text-red-600 uppercase tracking-wide">1:00 PM • Gulf Access</span>
-                        <h3 class="font-bold text-lg">SW Cape (Gulf Access)</h3>
-                        <p class="text-sm text-gray-600 mb-1">1733 SW 29th Ter, Cape Coral</p>
-                        <p class="text-sm italic text-gray-500 mb-2">The Florida Dream. Can he see himself boating from here?</p>
-                        <a href="https://www.google.com/maps/search/?api=1&query=1733+SW+29th+Ter+Cape+Coral+FL" target="_blank" class="text-red-600 hover:underline text-sm font-semibold">📍 Navigate Here</a>
-                    </div>
-
-                    <!-- Stop 3 -->
-                    <div class="day-card day-2 pl-4">
-                        <span class="text-xs font-bold text-red-600 uppercase tracking-wide">2:30 PM • Historic Character</span>
-                        <h3 class="font-bold text-lg">Savona Neighborhood</h3>
-                        <p class="text-sm text-gray-600 mb-1">3630 SE 17th Ave, Cape Coral</p>
-                        <p class="text-sm italic text-gray-500 mb-2">Mature palms, "Old Florida" charm. Established neighborhood feel.</p>
-                        <a href="https://www.google.com/maps/search/?api=1&query=3630+SE+17th+Ave+Cape+Coral+FL" target="_blank" class="text-red-600 hover:underline text-sm font-semibold">📍 Navigate Here</a>
-                    </div>
-
-                    <!-- Lunch -->
-                    <div class="day-card day-2 pl-4 border-l-gray-400">
-                        <span class="text-xs font-bold text-gray-600 uppercase tracking-wide">LUNCH / VIBE CHECK</span>
-                        <h3 class="font-bold text-lg">Cape Harbour</h3>
-                        <p class="text-sm text-gray-600 mb-1">5703 Cape Harbour Dr, Cape Coral</p>
-                        <p class="text-sm italic text-gray-500 mb-2">Grab a drink at the marina. Watch the boats. Feel the energy.</p>
-                        <a href="https://www.google.com/maps/search/?api=1&query=5703+Cape+Harbour+Dr+Cape+Coral+FL" target="_blank" class="text-gray-600 hover:underline text-sm font-semibold">📍 Navigate Here</a>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-        
-        <!-- Checklist Footer -->
-        <div class="mt-8 bg-yellow-50 p-6 rounded-lg border border-yellow-200">
-            <h3 class="font-bold text-lg text-yellow-800 mb-2">Dad's Mental Checklist</h3>
-            <ul class="list-disc pl-5 space-y-1 text-sm text-yellow-900">
-                <li><strong>The Bridge Tax:</strong> Did crossing the toll bridge into Cape Coral annoy him?</li>
-                <li><strong>The Cage Check:</strong> Look at the pool cage beams. Rusty = $$$ replacement soon.</li>
-                <li><strong>The Villa Verdict:</strong> After Friday, is a "shared wall" a dealbreaker?</li>
-            </ul>
-        </div>
-
-    </div>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
 
-    <script>
-        // Initialize map centered between the two areas
-        var map = L.map('map').setView([26.62, -81.85], 11);
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
+    <style>
+        /* Custom scrollbar for the sidebar */
+        .listing-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .listing-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .listing-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .listing-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
 
-        // Day 1 Data (Blue)
-        var day1 = [
-            { lat: 26.709743, lng: -81.7125818, title: "1. Hawks Preserve", addr: "2501 Hawks Preserve Dr" },
-            { lat: 26.685, lng: -81.72, title: "2. Buckingham Area", addr: "1168 Brooklands Dr" }, // Approx for Buckingham/Bentley Crossing
-            { lat: 26.69, lng: -81.78, title: "3. Hemingway Pointe", addr: "14168 Hemingway Oaks Trl" } // Approx for Hemingway
-        ];
+        /* Map height calculation to fill screen minus header */
+        #map {
+            height: 50vh;
+            width: 100%;
+            z-index: 1;
+        }
 
-        // Day 2 Data (Red)
-        var day2 = [
-            { lat: 26.6238892, lng: -82.001376, title: "1. Newer Build (Freshwater)", addr: "1217 SW 15th Ter" },
-            { lat: 26.5979226, lng: -82.0115773, title: "2. Gulf Access Dream", addr: "1733 SW 29th Ter" },
-            { lat: 26.5834619, lng: -81.9398346, title: "3. Savona Historic", addr: "3630 SE 17th Ave" },
-            { lat: 26.542, lng: -82.006, title: "Lunch: Cape Harbour", addr: "5703 Cape Harbour Dr" } // Approx Cape Harbour
-        ];
+        @media (min-width: 768px) {
+            #map {
+                height: calc(100vh - 80px); /* Full height minus header */
+            }
+        }
 
-        // Custom Icons
-        var blueIcon = new L.Icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
-            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-            iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
-        });
+        .card-active {
+            border-left: 4px solid #3b82f6;
+            background-color: #eff6ff;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 h-screen flex flex-col overflow-hidden">
 
-        var redIcon = new L.Icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-            iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
-        });
+    <!-- Header / Filter Bar -->
+    <header class="bg-white shadow-md z-20 p-4 shrink-0 h-[80px] flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-map-location-dot text-blue-600 text-2xl"></i>
+            <h1 class="text-xl font-bold text-gray-800 hidden sm:block">Fort Myers Hunt</h1>
+        </div>
 
-        // Add Markers & Lines Day 1
-        var day1LatLngs = [];
-        day1.forEach(function(stop) {
-            L.marker([stop.lat, stop.lng], {icon: blueIcon}).addTo(map)
-                .bindPopup("<b>" + stop.title + "</b><br>" + stop.addr);
-            day1LatLngs.push([stop.lat, stop.lng]);
-        });
-        L.polyline(day1LatLngs, {color: '#3B82F6', weight: 3, dashArray: '6 4'}).addTo(map);
+        <!-- Filters -->
+        <div class="flex gap-2 sm:gap-4 overflow-x-auto">
+            <div class="flex items-center gap-2">
+                <label class="text-sm text-gray-600 hidden sm:block">Max Price:</label>
+                <select id="priceFilter" class="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500">
+                    <option value="1000000">Any Price</option>
+                    <option value="600000">$600k</option>
+                    <option value="500000">$500k</option>
+                    <option value="400000">$400k</option>
+                </select>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <label class="text-sm text-gray-600 hidden sm:block">Date:</label>
+                <select id="dateFilter" class="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500">
+                    <option value="all">All Dates</option>
+                    <option value="Sat Oct 28">Sat Oct 28</option>
+                    <option value="Sun Oct 29">Sun Oct 29</option>
+                </select>
+            </div>
+            
+            <button onclick="applyFilters()" class="bg-blue-600 text-white px-4 py-1 rounded text-sm hover:bg-blue-700 transition">
+                Filter
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex flex-col-reverse md:flex-row flex-1 overflow-hidden relative">
         
-        // Add Markers & Lines Day 2
-        var day2LatLngs = [];
-        day2.forEach(function(stop) {
-            L.marker([stop.lat, stop.lng], {icon: redIcon}).addTo(map)
-                .bindPopup("<b>" + stop.title + "</b><br>" + stop.addr);
-            day2LatLngs.push([stop.lat, stop.lng]);
-        });
-        L.polyline(day2LatLngs, {color: '#EF4444', weight: 3, dashArray: '6 4'}).addTo(map);
+        <!-- Sidebar Listing View -->
+        <div class="w-full md:w-1/3 lg:w-1/4 bg-white shadow-lg z-10 overflow-y-auto listing-scroll" id="listings-container">
+            <!-- Listings will be injected here via JS -->
+        </div>
 
-        // Fit bounds to show all markers
-        var group = new L.featureGroup([
-            L.marker([26.709743, -81.7125818]), 
-            L.marker([26.542, -82.006])
-        ]);
-        map.fitBounds(group.getBounds().pad(0.5));
+        <!-- Map View -->
+        <div class="w-full md:w-2/3 lg:w-3/4 relative bg-gray-200">
+            <div id="map"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DATA ---
+        // Mock data for 3 listings around Fort Myers, FL
+        const listings = [
+            {
+                id: 1,
+                title: "River District Modern Condo",
+                price: 450000,
+                address: "2300 First St, Fort Myers, FL 33901",
+                beds: 2,
+                baths: 2,
+                sqft: 1200,
+                openDate: "Sat Oct 28",
+                openTime: "10:00 AM - 2:00 PM",
+                image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=400",
+                lat: 26.6436,
+                lng: -81.8723, // Downtown
+                desc: "Stunning views of the Caloosahatchee River."
+            },
+            {
+                id: 2,
+                title: "Colonial Blvd Family Home",
+                price: 525000,
+                address: "4500 Colonial Blvd, Fort Myers, FL 33966",
+                beds: 4,
+                baths: 3,
+                sqft: 2400,
+                openDate: "Sat Oct 28",
+                openTime: "1:00 PM - 4:00 PM",
+                image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=400",
+                lat: 26.6033,
+                lng: -81.8210, // Mid-town
+                desc: "Spacious backyard with pool, perfect for families."
+            },
+            {
+                id: 3,
+                title: "McGregor Blvd Historic Cottage",
+                price: 385000,
+                address: "1500 McGregor Blvd, Fort Myers, FL 33901",
+                beds: 3,
+                baths: 2,
+                sqft: 1800,
+                openDate: "Sun Oct 29",
+                openTime: "11:00 AM - 3:00 PM",
+                image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&q=80&w=400",
+                lat: 26.6300,
+                lng: -81.8800, // McGregor area
+                desc: "Charming historic architecture with modern updates."
+            }
+        ];
+
+        // --- STATE ---
+        let map;
+        let markers = {};
+        let activeId = null;
+
+        // --- INIT MAP ---
+        function initMap() {
+            // Center on Fort Myers
+            map = L.map('map').setView([26.6406, -81.8723], 12);
+
+            // Add OpenStreetMap Tile Layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            renderListings(listings);
+        }
+
+        // --- RENDER FUNCTIONS ---
+        
+        // 1. Render Markers and Sidebar Cards
+        function renderListings(data) {
+            const container = document.getElementById('listings-container');
+            container.innerHTML = ''; // Clear sidebar
+            
+            // Clear existing markers from map
+            for (let id in markers) {
+                map.removeLayer(markers[id]);
+            }
+            markers = {};
+
+            if (data.length === 0) {
+                container.innerHTML = '<div class="p-8 text-center text-gray-500">No listings found matching your filters.</div>';
+                return;
+            }
+
+            data.forEach(item => {
+                // A. Add Marker to Map
+                const marker = L.marker([item.lat, item.lng]).addTo(map);
+                
+                // Add popup
+                marker.bindPopup(`
+                    <div class="text-center">
+                        <strong class="block text-gray-800">${item.title}</strong>
+                        <div class="text-blue-600 font-bold">$${item.price.toLocaleString()}</div>
+                    </div>
+                `);
+
+                // Marker Click Event
+                marker.on('click', () => {
+                    highlightListing(item.id);
+                    scrollToCard(item.id);
+                });
+
+                markers[item.id] = marker;
+
+                // B. Add Card to Sidebar
+                const card = document.createElement('div');
+                card.id = `listing-${item.id}`;
+                card.className = "cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition p-4 flex gap-4";
+                card.onclick = () => {
+                    highlightListing(item.id);
+                    // Fly to location on map
+                    map.flyTo([item.lat, item.lng], 14, {
+                        animate: true,
+                        duration: 1.5
+                    });
+                    markers[item.id].openPopup();
+                };
+
+                card.innerHTML = `
+                    <div class="w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-gray-200">
+                        <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-gray-800 truncate">${item.title}</h3>
+                            <span class="text-blue-600 font-bold text-sm">$${(item.price / 1000).toFixed(0)}k</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mb-1"><i class="fa-solid fa-location-dot mr-1"></i>${item.address}</p>
+                        
+                        <div class="flex gap-3 text-xs text-gray-600 mb-2">
+                            <span><i class="fa-solid fa-bed"></i> ${item.beds}bd</span>
+                            <span><i class="fa-solid fa-bath"></i> ${item.baths}ba</span>
+                            <span><i class="fa-solid fa-ruler-combined"></i> ${item.sqft} sqft</span>
+                        </div>
+
+                        <div class="bg-blue-50 text-blue-800 text-xs px-2 py-1 rounded inline-block">
+                            <i class="fa-regular fa-clock mr-1"></i> ${item.openDate} • ${item.openTime}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        // --- INTERACTION ---
+
+        function highlightListing(id) {
+            // Remove active class from previous
+            if (activeId) {
+                const prevCard = document.getElementById(`listing-${activeId}`);
+                if (prevCard) prevCard.classList.remove('card-active');
+            }
+
+            // Add active class to current
+            const currCard = document.getElementById(`listing-${id}`);
+            if (currCard) {
+                currCard.classList.add('card-active');
+                activeId = id;
+            }
+        }
+
+        function scrollToCard(id) {
+            const card = document.getElementById(`listing-${id}`);
+            if (card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // --- FILTERING ---
+
+        function applyFilters() {
+            const maxPrice = document.getElementById('priceFilter').value;
+            const selectedDate = document.getElementById('dateFilter').value;
+
+            const filtered = listings.filter(item => {
+                const matchesPrice = item.price <= parseInt(maxPrice);
+                const matchesDate = selectedDate === 'all' || item.openDate === selectedDate;
+                return matchesPrice && matchesDate;
+            });
+
+            renderListings(filtered);
+            
+            // Recenter map to fit bounds of new markers if any exist
+            if (filtered.length > 0) {
+                const group = new L.featureGroup(filtered.map(i => markers[i.id]));
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
+        }
+
+        // Initialize App
+        window.onload = initMap;
 
     </script>
 </body>
